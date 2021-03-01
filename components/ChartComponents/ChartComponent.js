@@ -10,7 +10,6 @@ import Chart from './Chart';
 import { useSelector } from 'react-redux';
 
 const ChartComponent = () => {
-  const [data, setData] = useState(null);
   const { error, loaded, loading } = useSelector(
     (state) => state.data.loading_state
   );
@@ -27,8 +26,9 @@ const ChartComponent = () => {
       ) : loaded ? (
         <>
           <ChartHeaderComponent />
-          {/*
-          <Chart station={substance} substances={substance} /> */}
+
+          {/* <Chart station={substance} substances={substance} /> */}
+          <Chart />
         </>
       ) : error ? (
         <div className="content_loading_error">SOMTHING WENT WRONG !</div>

@@ -13,6 +13,9 @@ export const SubstanceWrapper = styled.div`
   width: 100%;
   height: 49%;
   padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
 `;
 
 export const ChartWrapper = styled.div`

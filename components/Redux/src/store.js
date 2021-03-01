@@ -1,4 +1,9 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  createSlice,
+  getDefaultMiddleware,
+} from '@reduxjs/toolkit';
+import { FetchWithThunk } from '../../../HelperFunctions/lib/fetchMainDataThunk';
 
 import {
   aqi_request,
@@ -7,6 +12,7 @@ import {
   testReducer,
   testAdd,
 } from './dataSlices';
+import { SetActiveSubstanceMiddleware } from './middlewares/setActiveSubstanceMiddleware';
 
 const initialState = [];
 
@@ -22,21 +28,14 @@ const todoSlice = createSlice({
 
 export const { todoAdded } = todoSlice.actions;
 
-const testMiddleware = (store) => (next) => (action) => {
-  console.log(typeof action, ' <<<< action from middleware');
-
-  if (typeof action === 'function') {
-  }
-
-  next(action);
-};
-
 export const store = configureStore({
   reducer: {
     todos: todoSlice.reducer,
     data: mainDataReducer,
     test: testReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(SetActiveSubstanceMiddleware),
 });
 
 store.subscribe(() => {

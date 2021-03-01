@@ -2,13 +2,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-I will rewrite documentation when i would winish this project
-(andro :\* )
+Parses Georgian Air Quality Monitoring API
+
+Tech: React,Next.js,D3(data visualisation library),Redux
 
 First, run the development server:
-
-Yea it's good idea, if you want to check
-it already has some ui ;)
 
 ```bash
 npm run dev

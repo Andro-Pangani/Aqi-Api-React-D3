@@ -11,7 +11,6 @@ export const useActiveCity = (my_id) => {
     } else {
       setActive(false);
     }
-    console.log(activeCity, active, '  <<<<< active City');
   }, [activeCity]);
 
   return active;
@@ -27,7 +26,6 @@ export const useActiveStation = (my_id) => {
     } else {
       setActive(false);
     }
-    console.log(activeCity, active, '  <<<<< active City');
   }, [activeCity]);
 
   return active;

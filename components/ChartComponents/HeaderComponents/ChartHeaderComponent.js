@@ -29,7 +29,7 @@ const ChartHeaderComponent = () => {
               <li key={item.city} className="header_list-item">
                 <CityItem
                   key={headerData[item].id}
-                  activeStation={headerData[item].active_station}
+                  activeStationId={headerData[item].active_station}
                   name={item}
                   id={headerData[item].id}
                 />

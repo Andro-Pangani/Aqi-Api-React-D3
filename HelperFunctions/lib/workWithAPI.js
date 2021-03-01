@@ -4,6 +4,7 @@ export const ApiHandler = (data) => {
   let mainData = {
     active_city: null,
     active_station: null,
+    active_substance: null,
     cities: {
       Tbilisi: {
         id: 51,
@@ -89,6 +90,7 @@ export const ApiHandler = (data) => {
       {
         id: station.id,
         address: station.address_en,
+        substances: station.stationequipment_set,
       },
     ];
 
@@ -101,7 +103,7 @@ export const ApiHandler = (data) => {
   mainData.stations = checkedData;
 
   // Here we set Active City for UI
-  // To highlight when date is loaded
+  // To highlight when data is loaded
   let active_city_set = false;
   let { cities } = mainData;
   Object.keys(cities).map((city) => {
@@ -110,20 +112,27 @@ export const ApiHandler = (data) => {
         console.log(cities[city], '{{{{{{{{{{{{{{{active city}}}}}}}}}}}}}}}');
         mainData.active_city = cities[city].id;
         mainData.active_station = cities[city].active_station;
+        let active_station_id = cities[city].active_station;
+
+        for (let i = 0; i < data.length; i++) {
+          let station = data[i];
+          if (station.id === active_station_id) {
+            console.log('################ active station ', station);
+            let equipment = station.stationequipment_set;
+            for (let i = 0; i < equipment.length; i++) {
+              if (!equipment[i].empty) {
+                mainData.active_substance = equipment[i];
+                break;
+              }
+            }
+            break;
+          }
+        }
       }
       active_city_set = true;
-      console.log(city, ' ############ object mapping');
     }
   });
-  // for (let city of mainData.cities) {
-  //   console.log(city, ' ############ for of');
-  //   // if (!city.empty) {
-  //   // mainData.active_city = mainData[city].id;
-  //   // when we found firs not empty city
-  //   // do not continue, set active city and break;
-  //   // break;
-  //   // }
-  // }
+
   console.log(checkedData, mainData, ' <<<<<<<< Checked data');
 
   return mainData;

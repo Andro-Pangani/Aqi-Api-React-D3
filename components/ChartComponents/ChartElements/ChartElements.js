@@ -4,7 +4,11 @@ export const AxisBottom = ({ xScale, innerHeight, tickFormat }) =>
   xScale.ticks().map((tickValue, i) => {
     return (
       <g transform={`translate(${xScale(tickValue)},0)`} key={i}>
-        <line className="x_axis_line" key={Math.random()} y2={innerHeight} />
+        <line
+          className="x_axis_line"
+          key={Math.random()}
+          y2={innerHeight - 50}
+        />
         <text
           className="x_axis_text"
           key={tickValue}

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const Wrapper = styled.div`
   position: relative;
   padding: 1rem;
-
   ul {
     list-style: none;
     margin: 0;

@@ -4,6 +4,7 @@ import {
   aqi_success,
   setActiveCity,
   setActiveStation,
+  setActiveSubstance,
 } from '../../components/Redux/src/dataSlices';
 import { ApiHandler } from './workWithAPI';
 
@@ -19,9 +20,11 @@ export const FetchWithThunk = (url) => async (dispatch, getState) => {
   if (data && data.length > 0) {
     let sortedData = ApiHandler(data);
 
-    dispatch(aqi_success(sortedData));
     dispatch(setActiveCity(sortedData.active_city));
     dispatch(setActiveStation(sortedData.active_station));
+    dispatch(setActiveSubstance(sortedData.active_substance));
+
+    dispatch(aqi_success(sortedData));
   }
 
   //loaded with * error or empty

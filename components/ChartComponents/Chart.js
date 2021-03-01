@@ -13,31 +13,44 @@ import {
 import { AxisBottom, AxisLeft, Marks } from './ChartElements/ChartElements';
 import { Wrapper, SubstanceWrapper, ChartWrapper } from './Chart.styled';
 import { AxisLeftLabels } from './ChartElements/AxisLeftLabels';
+import { useSelector } from 'react-redux';
+import { createSelector } from '@reduxjs/toolkit';
+import { ChartSubstanceItem } from './ChartSubstanceItem';
 
-// let data = [
-//   { type: 'PM10', count: 332, time: '2021-02-16T15:00:00' },
-//   { type: 'PM2.5', count: 31, time: '2021-02-16T16:00:00' },
-//   { type: 'NO2', count: 200, time: '2021-02-16T17:00:00' },
-//   { type: 'SO2', count: 24, time: '2021-02-16T18:00:00' },
-//   { type: 'O3', count: 342, time: '2021-02-16T19:00:00' },
-//   { type: 'CO', count: 34, time: '2021-02-16T20:00:00' },
-//   { type: 'Sum', count: 23, time: '2021-02-16T21:00:00' },
-// ];
+const activeStationSelector = createSelector(
+  (state) => state.data.aqi_data.stations,
+  (_, active_station_id) => active_station_id,
+  (stations, active_station_id) => {
+    let activeEquipment = null;
+    for (let i = 0; i < stations.length; i++) {
+      if (stations[i].id === active_station_id) {
+        activeEquipment = stations[i].stationequipment_set;
+        break;
+      }
+    }
 
-// data = data.map((item) => {
-//   return { ...item, time: new Date(item.time).getTime() };
-// });
+    // returns Array of StationEquipment Set of Active Station
+    return activeEquipment;
+  }
+);
 
-const ChartD3 = ({ station }) => {
+const ChartD3 = () => {
+  const active_substance = useSelector((state) => state.data.active_substance);
+  const active_station_id = useSelector((state) => state.data.active_station);
+
+  const activeEquipmentSet = useSelector((state) =>
+    activeStationSelector(state, active_station_id)
+  );
+
   const svgRef = useRef(null);
   const [svgProps, setSvgProps] = useState({ width: 10, height: 10 });
-  console.log(station, ' << Station from Chart');
+  console.log(active_substance, ' << Station from Chart');
 
-  let data = station?.data1hour_set.map((item) => {
+  let data = active_substance?.data1hour_set.map((item) => {
     return { value: item.value, time: new Date(item.date_time).getTime() };
   });
 
-  let indexLevel = station.substance.airqualityindexlevel_set[0];
+  let indexLevel = active_substance?.substance.airqualityindexlevel_set[0];
 
   let from = indexLevel.good_from;
   let to = indexLevel.very_poor_from;
@@ -88,9 +101,31 @@ const ChartD3 = ({ station }) => {
 
   const tickFormat = timeFormat('%H:%M');
 
+  // Active Substance UI
+  const [activeSubstance, setActiveSubstance] = useState(null);
+
+  const ActiveSubstanceHandler = (id) => {
+    console.log(id, ' ActiveSubstance');
+    setActiveSubstance(id);
+  };
+
   return (
     <Wrapper>
-      <SubstanceWrapper className="chart_substances">Pm</SubstanceWrapper>
+      <SubstanceWrapper className="chart_substances">
+        {activeEquipmentSet.length > 0
+          ? activeEquipmentSet.map((substance, index) => {
+              return (
+                <ChartSubstanceItem
+                  key={index}
+                  setActiveSubstance={ActiveSubstanceHandler}
+                  // active={activeSubstanceId}
+                  name={substance.substance.name}
+                  substance={substance}
+                />
+              );
+            })
+          : null}
+      </SubstanceWrapper>
 
       <ChartWrapper>
         <svg ref={svgRef}>
